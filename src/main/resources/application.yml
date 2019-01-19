@@ -3,6 +3,6 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://localhost:3306/sea_tide/
+    url: jdbc:mysql://localhost:3306/sea_tide
     username: root
     password: mysql
