@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.cciradih.sea_tide_service.component.ResponseFormatComponent;
 import top.cciradih.sea_tide_service.enumeration.StatusEnumeration;
-import top.cciradih.sea_tide_service.service.CharacterService;
-import top.cciradih.sea_tide_service.view.CharacterView;
+import top.cciradih.sea_tide_service.service.RoleService;
 import top.cciradih.sea_tide_service.view.ResponseView;
+import top.cciradih.sea_tide_service.view.RoleView;
 
 @RestController
 @RequestMapping("/characters")
-public class CharacterController {
+public class RoleController {
     @Autowired
-    private CharacterService characterService;
+    private RoleService roleService;
     @Autowired
     private ResponseFormatComponent responseFormatComponent;
 
     @PostMapping("/")
-    public ResponseEntity<ResponseView> save(@RequestBody CharacterView characterView) {
-        characterView = characterService.save(characterView);
-        return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, characterView);
+    public ResponseEntity<ResponseView> save(@RequestBody RoleView roleView) {
+        roleView = roleService.save(roleView);
+        return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, roleView);
     }
 }
