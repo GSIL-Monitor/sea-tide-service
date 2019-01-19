@@ -14,7 +14,7 @@ import top.cciradih.sea_tide_service.view.ResponseView;
 import top.cciradih.sea_tide_service.view.RoleView;
 
 @RestController
-@RequestMapping("/characters")
+@RequestMapping("/roles")
 public class RoleController {
     @Autowired
     private RoleService roleService;
