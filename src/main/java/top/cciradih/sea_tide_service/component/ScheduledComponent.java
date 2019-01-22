@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.cciradih.sea_tide_service.entity.Character;
+import top.cciradih.sea_tide_service.entity.Corporation;
 import top.cciradih.sea_tide_service.entity.CorporationTax;
 import top.cciradih.sea_tide_service.enumeration.StatusEnumeration;
 import top.cciradih.sea_tide_service.exception.SeaTideException;
@@ -14,6 +15,7 @@ import top.cciradih.sea_tide_service.repository.CorporationTaxRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Component
 public class ScheduledComponent {
@@ -36,15 +38,16 @@ public class ScheduledComponent {
     public void say() throws SeaTideException {
         JsonNode corporationIdJsonNode = allianceComponent.getCorporation();
         List<CorporationTax> corporationTaxList = new ArrayList<>();
-        for (JsonNode corporation : corporationIdJsonNode) {
-            Long corporationId = corporation.asLong();
+        for (JsonNode corporationJsonNode : corporationIdJsonNode) {
+            Long corporationId = corporationJsonNode.asLong();
             boolean exist = corporationRepository.existsById(corporationId);
             if (exist) {
-                JsonNode corporationJsonNode = corporationComponent.get(corporationId);
-                Long ceoId = corporationJsonNode.path("ceo_id").asLong();
+                Supplier<SeaTideException> seaTideExceptionSupplier = () -> SeaTideException.with(StatusEnumeration.F3);
+                Corporation corporation = corporationRepository.findById(corporationId).orElseThrow(seaTideExceptionSupplier);
+                Long ceoId = corporation.getCeoId();
                 exist = characterRepository.existsById(ceoId);
                 if (exist) {
-                    Character character = characterRepository.findById(ceoId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F3));
+                    Character character = characterRepository.findById(ceoId).orElseThrow(seaTideExceptionSupplier);
                     String refreshToken = character.getRefreshToken();
                     JsonNode tokenJsonNode = characterComponent.refreshToken(refreshToken);
                     String accessToken = tokenJsonNode.path("access_token").asText();
