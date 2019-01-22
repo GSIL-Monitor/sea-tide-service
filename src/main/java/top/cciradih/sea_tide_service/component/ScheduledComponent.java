@@ -45,7 +45,6 @@ public class ScheduledComponent {
                 exist = characterRepository.existsById(ceoId);
                 if (exist) {
                     Character character = characterRepository.findById(ceoId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F3));
-                    System.out.println(character);
                     String refreshToken = character.getRefreshToken();
                     JsonNode tokenJsonNode = characterComponent.refreshToken(refreshToken);
                     String accessToken = tokenJsonNode.path("access_token").asText();
