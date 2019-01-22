@@ -24,7 +24,8 @@ public class CorporationComponent {
             }
             return jsonNodeList;
         } catch (HttpClientErrorException | IOException e) {
-            return getWalletJournal(id, page, accessToken, jsonNodeList);
+            getWalletJournal(id, page, accessToken, jsonNodeList);
         }
+        return jsonNodeList;
     }
 }
