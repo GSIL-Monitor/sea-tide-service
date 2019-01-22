@@ -69,7 +69,7 @@ public class ScheduledComponent {
                             }
                         }
                     }
-                    System.out.println(corporationTaxList);
+                    System.out.println(corporationTaxList.size());
                 }
             }
         }
