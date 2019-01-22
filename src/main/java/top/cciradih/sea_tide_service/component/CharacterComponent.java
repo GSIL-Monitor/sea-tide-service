@@ -25,7 +25,8 @@ public class CharacterComponent {
         body.put("code", code);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        String authorization = "Basic " + Base64.getEncoder().encodeToString("32c2376ce40d4ec9b1c96d99da5dbb59:wlSTgXEgPTv4d1X97nVqIkxB63tEWcRFHQYb0GL5".getBytes());
+        String authorization = "Basic " + Base64.getEncoder().encodeToString("d842cdda9617448b980e7eeceeff0288:NWTgHV5iy2EDz2uzoRJ8UbDEUoeO0mhujUWPLBMd".getBytes());
+//        String authorization = "Basic " + Base64.getEncoder().encodeToString("32c2376ce40d4ec9b1c96d99da5dbb59:wlSTgXEgPTv4d1X97nVqIkxB63tEWcRFHQYb0GL5".getBytes());
         httpHeaders.add(HttpHeaders.AUTHORIZATION, authorization);
 
         HttpEntity<Map<String, String>> httpEntity = new HttpEntity<>(body, httpHeaders);
