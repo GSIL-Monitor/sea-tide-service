@@ -48,7 +48,7 @@ public class AllianceService {
 
     public ResponseEntity<ResponseView> getTax(Long characterId, Long startDate, Long endDate) {
         try {
-            administratorRepository.findById(characterId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F3));
+            administratorRepository.findById(characterId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F5));
         } catch (SeaTideException e) {
             String message = e.getMessage();
             return responseFormatComponent.format(message, HttpStatus.BAD_REQUEST);
