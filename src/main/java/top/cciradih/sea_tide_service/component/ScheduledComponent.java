@@ -34,9 +34,10 @@ public class ScheduledComponent {
 
     //    @Scheduled(cron = "0 0 * * * *")
     public void say() throws SeaTideException {
-        JsonNode allianceJsonNode = allianceComponent.getCorporation();
-        for (JsonNode alliance : allianceJsonNode) {
-            Long corporationId = alliance.asLong();
+        JsonNode corporationIdJsonNode = allianceComponent.getCorporation();
+        List<CorporationTax> corporationTaxList = new ArrayList<>();
+        for (JsonNode corporation : corporationIdJsonNode) {
+            Long corporationId = corporation.asLong();
             boolean exist = corporationRepository.existsById(corporationId);
             if (exist) {
                 JsonNode corporationJsonNode = corporationComponent.get(corporationId);
@@ -44,6 +45,7 @@ public class ScheduledComponent {
                 exist = characterRepository.existsById(ceoId);
                 if (exist) {
                     Character character = characterRepository.findById(ceoId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F3));
+                    System.out.println(character);
                     String refreshToken = character.getRefreshToken();
                     JsonNode tokenJsonNode = characterComponent.refreshToken(refreshToken);
                     String accessToken = tokenJsonNode.path("access_token").asText();
@@ -60,12 +62,13 @@ public class ScheduledComponent {
                                 Date date = seaTideComponent.format(dateString);
                                 Long characterId = walletJournal.path("second_party_id").asLong();
                                 CorporationTax corporationTax = new CorporationTax(walletJournalId, amount, date, characterId, corporationId);
-                                corporationTaxRepository.save(corporationTax);
+                                corporationTaxList.add(corporationTax);
                             }
                         }
                     }
                 }
             }
         }
+        corporationTaxRepository.saveAll(corporationTaxList);
     }
 }

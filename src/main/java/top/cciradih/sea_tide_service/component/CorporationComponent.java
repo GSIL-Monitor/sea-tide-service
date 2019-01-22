@@ -30,6 +30,7 @@ public class CorporationComponent {
         try {
             String json = new RestTemplate().getForObject(url, String.class);
             JsonNode jsonNode = new ObjectMapper().readTree(json);
+            System.out.println(jsonNode);
             jsonNodeList.add(jsonNode);
             if (jsonNode.size() == 1000) {
                 getWalletJournal(id, page + 1, accessToken, jsonNodeList);
