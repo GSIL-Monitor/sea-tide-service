@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 public class CorporationComponent {
     public List<JsonNode> getWalletJournal(Long id, Integer page, String accessToken, List<JsonNode> jsonNodeList) {
+        System.out.println(jsonNodeList.size() * 1000);
         Request request = new Request.Builder().get().url("https://esi.evetech.net/latest/corporations/" + id + "/wallets/1/journal/?datasource=tranquility&page=" + page + "&token=" + accessToken).build();
         try {
             String json = new OkHttpClient().newCall(request).execute().body().string();
