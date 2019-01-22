@@ -11,13 +11,20 @@ import org.springframework.stereotype.Service;
 import top.cciradih.sea_tide_service.component.CharacterComponent;
 import top.cciradih.sea_tide_service.component.ResponseFormatComponent;
 import top.cciradih.sea_tide_service.entity.Character;
+import top.cciradih.sea_tide_service.entity.Tax;
 import top.cciradih.sea_tide_service.enumeration.StatusEnumeration;
 import top.cciradih.sea_tide_service.exception.SeaTideException;
 import top.cciradih.sea_tide_service.repository.AllianceRepository;
 import top.cciradih.sea_tide_service.repository.CharacterRepository;
 import top.cciradih.sea_tide_service.repository.CorporationRepository;
+import top.cciradih.sea_tide_service.repository.TaxRepository;
 import top.cciradih.sea_tide_service.view.CharacterView;
 import top.cciradih.sea_tide_service.view.ResponseView;
+import top.cciradih.sea_tide_service.view.TaxView;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class CharacterService {
@@ -29,6 +36,8 @@ public class CharacterService {
     private AllianceRepository allianceRepository;
     @Autowired
     private CorporationRepository corporationRepository;
+    @Autowired
+    private TaxRepository taxRepository;
     @Autowired
     private CharacterComponent characterComponent;
     @Autowired
@@ -90,5 +99,18 @@ public class CharacterService {
             }
             return responseFormatComponent.format(StatusEnumeration.F4, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<ResponseView> getTax(Long characterId, Long startDate, Long endDate) {
+        Date start = new Date(startDate);
+        Date end = new Date(endDate);
+        List<Tax> taxList = taxRepository.findByCharacterIdAndDateBetween(characterId, start, end);
+        List<TaxView> taxViewList = new ArrayList<>();
+        for (Tax tax : taxList) {
+            Long amount = tax.getAmount();
+            TaxView taxView = new TaxView(amount);
+            taxViewList.add(taxView);
+        }
+        return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, taxViewList);
     }
 }

@@ -2,15 +2,16 @@ package top.cciradih.sea_tide_service.component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import top.cciradih.sea_tide_service.entity.Character;
 import top.cciradih.sea_tide_service.entity.Corporation;
-import top.cciradih.sea_tide_service.entity.CorporationTax;
+import top.cciradih.sea_tide_service.entity.Tax;
 import top.cciradih.sea_tide_service.enumeration.StatusEnumeration;
 import top.cciradih.sea_tide_service.exception.SeaTideException;
 import top.cciradih.sea_tide_service.repository.CharacterRepository;
 import top.cciradih.sea_tide_service.repository.CorporationRepository;
-import top.cciradih.sea_tide_service.repository.CorporationTaxRepository;
+import top.cciradih.sea_tide_service.repository.TaxRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,12 +33,12 @@ public class ScheduledComponent {
     @Autowired
     private SeaTideComponent seaTideComponent;
     @Autowired
-    private CorporationTaxRepository corporationTaxRepository;
+    private TaxRepository taxRepository;
 
-    //    @Scheduled(cron = "0 0 * * * *")
-    public void say() throws SeaTideException {
+    @Scheduled(cron = "0 0 * * * *")
+    public void getTax() throws SeaTideException {
         JsonNode corporationIdJsonNode = allianceComponent.getCorporation();
-        List<CorporationTax> corporationTaxList = new ArrayList<>();
+        List<Tax> taxList = new ArrayList<>();
         for (JsonNode corporationJsonNode : corporationIdJsonNode) {
             Long corporationId = corporationJsonNode.asLong();
             boolean exist = corporationRepository.existsById(corporationId);
@@ -48,7 +49,6 @@ public class ScheduledComponent {
                 exist = characterRepository.existsById(ceoId);
                 if (exist) {
                     Character character = characterRepository.findById(ceoId).orElseThrow(seaTideExceptionSupplier);
-                    System.out.println(character);
                     String refreshToken = character.getRefreshToken();
                     JsonNode tokenJsonNode = characterComponent.refreshToken(refreshToken);
                     String accessToken = tokenJsonNode.path("access_token").asText();
@@ -64,15 +64,14 @@ public class ScheduledComponent {
                                 String dateString = walletJournal.path("date").asText();
                                 Date date = seaTideComponent.format(dateString);
                                 Long characterId = walletJournal.path("second_party_id").asLong();
-                                CorporationTax corporationTax = new CorporationTax(walletJournalId, amount, date, characterId, corporationId);
-                                corporationTaxList.add(corporationTax);
+                                Tax tax = new Tax(walletJournalId, amount, date, characterId, corporationId);
+                                taxList.add(tax);
                             }
                         }
                     }
-                    System.out.println(corporationTaxList.size());
                 }
             }
         }
-        corporationTaxRepository.saveAll(corporationTaxList);
+        taxRepository.saveAll(taxList);
     }
 }

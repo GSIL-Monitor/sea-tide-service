@@ -18,4 +18,14 @@ public class CorporationController {
     public ResponseEntity<ResponseView> save(@RequestBody CorporationView corporationView) {
         return corporationService.save(corporationView);
     }
+
+    @GetMapping("/{corporationId}/director/{characterId}/tax/")
+    public ResponseEntity<ResponseView> getTax(@PathVariable Long characterId, @PathVariable Long corporationId, @RequestParam Long startDate, @RequestParam Long endDate) {
+        return corporationService.getTax(characterId, corporationId, startDate, endDate);
+    }
+
+    @GetMapping("/tax/")
+    public void getTax() {
+        corporationService.getTax();
+    }
 }

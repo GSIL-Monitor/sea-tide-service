@@ -23,4 +23,9 @@ public class CharacterController {
     public ResponseEntity<ResponseView> save(@RequestBody CharacterView characterView) {
         return characterService.save(characterView);
     }
+
+    @GetMapping("/{characterId}/tax/")
+    public ResponseEntity<ResponseView> getTax(@PathVariable Long characterId, @RequestParam Long startDate, @RequestParam Long endDate) {
+        return characterService.getTax(characterId, startDate, endDate);
+    }
 }

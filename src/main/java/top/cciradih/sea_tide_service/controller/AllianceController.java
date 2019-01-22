@@ -18,4 +18,9 @@ public class AllianceController {
     public ResponseEntity<ResponseView> save(@RequestBody AllianceView allianceView) {
         return allianceService.save(allianceView);
     }
+
+    @GetMapping("/administrator/{characterId}/tax/")
+    public ResponseEntity<ResponseView> getTax(@PathVariable Long characterId, @RequestParam Long startDate, @RequestParam Long endDate) {
+        return allianceService.getTax(characterId, startDate, endDate);
+    }
 }

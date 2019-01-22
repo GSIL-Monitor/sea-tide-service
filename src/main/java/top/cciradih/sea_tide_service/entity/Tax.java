@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Data
-public class CorporationTax {
+public class Tax {
     @Id
     private Long id;
     private Long amount;
@@ -16,10 +16,10 @@ public class CorporationTax {
     private Long characterId;
     private Long corporationId;
 
-    public CorporationTax() {
+    public Tax() {
     }
 
-    public CorporationTax(Long id, Long amount, Date date, Long characterId, Long corporationId) {
+    public Tax(Long id, Long amount, Date date, Long characterId, Long corporationId) {
         this.id = id;
         this.amount = amount;
         this.date = date;
