@@ -16,7 +16,7 @@ public class Character {
     private Long allianceId;
     private Long corporationId;
     private String refreshToken;
-    private Boolean administrator;
+    private Boolean administrator = false;
 
     public Character() {
     }
