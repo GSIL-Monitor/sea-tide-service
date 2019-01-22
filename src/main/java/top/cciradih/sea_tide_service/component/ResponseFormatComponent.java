@@ -8,17 +8,20 @@ import top.cciradih.sea_tide_service.view.ResponseView;
 
 @Component
 public class ResponseFormatComponent {
+    public ResponseEntity<ResponseView> format(String message, HttpStatus httpStatus) {
+        ResponseView responseView = new ResponseView(message);
+        return new ResponseEntity<>(responseView, httpStatus);
+    }
+
     public ResponseEntity<ResponseView> format(StatusEnumeration statusEnumeration, HttpStatus httpStatus) {
-        Integer code = statusEnumeration.getCode();
         String message = statusEnumeration.getMessage();
-        ResponseView responseView = new ResponseView(code, message);
+        ResponseView responseView = new ResponseView(message);
         return new ResponseEntity<>(responseView, httpStatus);
     }
 
     public ResponseEntity<ResponseView> format(StatusEnumeration statusEnumeration, HttpStatus httpStatus, Object object) {
-        Integer code = statusEnumeration.getCode();
         String message = statusEnumeration.getMessage();
-        ResponseView responseView = new ResponseView(code, message, object);
+        ResponseView responseView = new ResponseView(message, object);
         return new ResponseEntity<>(responseView, httpStatus);
     }
 }
