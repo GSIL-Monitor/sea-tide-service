@@ -17,8 +17,8 @@ public class CharacterComponent {
                 .add("grant_type", "authorization_code")
                 .add("code", code)
                 .build();
-//        String authorization = Credentials.basic("32c2376ce40d4ec9b1c96d99da5dbb59", "wlSTgXEgPTv4d1X97nVqIkxB63tEWcRFHQYb0GL5");
-        String authorization = Credentials.basic("d842cdda9617448b980e7eeceeff0288", "NWTgHV5iy2EDz2uzoRJ8UbDEUoeO0mhujUWPLBMd");
+        String authorization = Credentials.basic("32c2376ce40d4ec9b1c96d99da5dbb59", "wlSTgXEgPTv4d1X97nVqIkxB63tEWcRFHQYb0GL5");
+//        String authorization = Credentials.basic("d842cdda9617448b980e7eeceeff0288", "NWTgHV5iy2EDz2uzoRJ8UbDEUoeO0mhujUWPLBMd");
         Request request = new Request.Builder()
                 .post(formBody)
                 .url("https://login.eveonline.com/v2/oauth/token/")
@@ -39,8 +39,8 @@ public class CharacterComponent {
                 .add("grant_type", "refresh_token")
                 .add("refresh_token", refreshToken)
                 .build();
-//        String authorization = Credentials.basic("32c2376ce40d4ec9b1c96d99da5dbb59", "wlSTgXEgPTv4d1X97nVqIkxB63tEWcRFHQYb0GL5");
-        String authorization = Credentials.basic("d842cdda9617448b980e7eeceeff0288", "NWTgHV5iy2EDz2uzoRJ8UbDEUoeO0mhujUWPLBMd");
+        String authorization = Credentials.basic("32c2376ce40d4ec9b1c96d99da5dbb59", "wlSTgXEgPTv4d1X97nVqIkxB63tEWcRFHQYb0GL5");
+//        String authorization = Credentials.basic("d842cdda9617448b980e7eeceeff0288", "NWTgHV5iy2EDz2uzoRJ8UbDEUoeO0mhujUWPLBMd");
         Request request = new Request.Builder()
                 .post(formBody)
                 .url("https://login.eveonline.com/v2/oauth/token/")
