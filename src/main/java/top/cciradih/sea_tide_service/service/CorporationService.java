@@ -92,10 +92,7 @@ public class CorporationService {
             String message = e.getMessage();
             return responseFormatComponent.format(message, HttpStatus.BAD_REQUEST);
         }
-        String role = roleJsonNode.path("roles").get(0).asText();
-        if (role == null) {
-            return responseFormatComponent.format(StatusEnumeration.F5, HttpStatus.BAD_REQUEST);
-        }
+        String role = roleJsonNode.path("roles").path(0).asText();
         boolean director = "Director".equals(role);
         if (director) {
             Date start = new Date(startDate);
