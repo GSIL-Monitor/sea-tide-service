@@ -33,7 +33,7 @@ public class ScheduledComponent {
     @Autowired
     private TaxRepository taxRepository;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 0/4 * * *")
     public void getTax() throws SeaTideException {
         JsonNode corporationIdsJsonNode = allianceComponent.getCorporation();
         List<Tax> taxList = new ArrayList<>();

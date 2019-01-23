@@ -66,7 +66,6 @@ public class CharacterService {
     }
 
     public ResponseEntity<ResponseView> save(CharacterView characterView) {
-
         Long allianceId = characterView.getAllianceId();
         boolean belong = ALLIANCE_ID.equals(allianceId);
         Long id = characterView.getId();
