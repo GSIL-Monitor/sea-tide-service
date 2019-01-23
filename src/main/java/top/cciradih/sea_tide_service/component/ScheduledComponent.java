@@ -13,9 +13,7 @@ import top.cciradih.sea_tide_service.repository.CharacterRepository;
 import top.cciradih.sea_tide_service.repository.CorporationRepository;
 import top.cciradih.sea_tide_service.repository.TaxRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 @Component
@@ -37,10 +35,10 @@ public class ScheduledComponent {
 
     @Scheduled(cron = "0 0 * * * *")
     public void getTax() throws SeaTideException {
-        JsonNode corporationIdJsonNode = allianceComponent.getCorporation();
+        JsonNode corporationIdsJsonNode = allianceComponent.getCorporation();
         List<Tax> taxList = new ArrayList<>();
-        for (JsonNode corporationJsonNode : corporationIdJsonNode) {
-            Long corporationId = corporationJsonNode.asLong();
+        for (JsonNode corporationIdJsonNode : corporationIdsJsonNode) {
+            Long corporationId = corporationIdJsonNode.asLong();
             boolean exist = corporationRepository.existsById(corporationId);
             if (exist) {
                 Supplier<SeaTideException> seaTideExceptionSupplier = () -> SeaTideException.with(StatusEnumeration.F3);
@@ -72,6 +70,10 @@ public class ScheduledComponent {
                 }
             }
         }
+        List<Tax> existTaxList = taxRepository.findAll();
+        HashSet<Tax> existTaxSet = new HashSet<>(existTaxList);
+        taxList = new LinkedList<>(taxList);
+        taxList.removeAll(existTaxSet);
         taxRepository.saveAll(taxList);
     }
 }
