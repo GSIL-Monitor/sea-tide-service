@@ -58,7 +58,7 @@ public class CharacterService {
         int lastIndex = subject.lastIndexOf(":") + 1;
         String idString = subject.substring(lastIndex);
         Long id = Long.valueOf(idString);
-        Character character = new Character(id, refreshToken);
+        Character character = characterRepository.findById(id).orElse(new Character(id, refreshToken));
         character = characterRepository.save(character);
         id = character.getId();
         CharacterView characterView = new CharacterView(id);
@@ -89,7 +89,8 @@ public class CharacterService {
             name = character.getName();
             allianceId = character.getAllianceId();
             corporationId = character.getCorporationId();
-            characterView = new CharacterView(id, name, allianceId, corporationId);
+            Boolean verification = character.getVerification();
+            characterView = new CharacterView(id, name, allianceId, corporationId, verification);
             return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, characterView);
         } else {
             characterRepository.deleteById(id);
@@ -112,5 +113,60 @@ public class CharacterService {
             taxViewList.add(taxView);
         }
         return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, taxViewList);
+    }
+
+    public ResponseEntity<ResponseView> getVerificationCode(Long characterId, String email) {
+        Character character;
+        try {
+            character = characterRepository.findById(characterId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F1));
+        } catch (SeaTideException e) {
+            return responseFormatComponent.format(StatusEnumeration.F3, HttpStatus.BAD_REQUEST);
+        }
+        Integer verificationCode = characterComponent.sendVerificationCode(email);
+        character.setEmail(email);
+        character.setVerificationCode(verificationCode);
+        characterRepository.save(character);
+        CharacterView characterView = new CharacterView(verificationCode);
+        return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, characterView);
+    }
+
+    public ResponseEntity<ResponseView> verify(Long characterId, Integer verificationCode, String nickname) {
+        Character character;
+        try {
+            character = characterRepository.findById(characterId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F1));
+        } catch (SeaTideException e) {
+            return responseFormatComponent.format(StatusEnumeration.F3, HttpStatus.BAD_REQUEST);
+        }
+        Integer existVerificationCode = character.getVerificationCode();
+        boolean verification = verificationCode.equals(existVerificationCode);
+        if (verification) {
+            character.setVerification(true);
+            character.setNickname(nickname);
+            characterRepository.save(character);
+            String name = character.getName();
+            CharacterView characterView = new CharacterView(name);
+            return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, characterView);
+        } else {
+            return responseFormatComponent.format(StatusEnumeration.F4, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<ResponseView> getGroup(Long characterId) {
+        Character existCharacter;
+        try {
+            existCharacter = characterRepository.findById(characterId).orElseThrow(() -> SeaTideException.with(StatusEnumeration.F1));
+        } catch (SeaTideException e) {
+            return responseFormatComponent.format(StatusEnumeration.F3, HttpStatus.BAD_REQUEST);
+        }
+        String nickname = existCharacter.getNickname();
+        String email = existCharacter.getEmail();
+        List<Character> characterList = characterRepository.findByEmailAndNicknameAndVerification(email, nickname, true);
+        List<CharacterView> characterViewList = new ArrayList<>();
+        for (Character character : characterList) {
+            String name = character.getName();
+            CharacterView characterView = new CharacterView(name);
+            characterViewList.add(characterView);
+        }
+        return responseFormatComponent.format(StatusEnumeration.S0, HttpStatus.OK, characterViewList);
     }
 }

@@ -3,15 +3,22 @@ package top.cciradih.sea_tide_service.component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import top.cciradih.sea_tide_service.enumeration.StatusEnumeration;
 import top.cciradih.sea_tide_service.exception.SeaTideException;
 
 import java.io.IOException;
+import java.util.Random;
 
 @Component
 public class CharacterComponent {
+    @Autowired
+    private JavaMailSender javaMailSender;
+
     public JsonNode getToken(String code) throws SeaTideException {
         RequestBody formBody = new FormBody.Builder()
                 .add("grant_type", "authorization_code")
@@ -66,5 +73,26 @@ public class CharacterComponent {
         } catch (IOException e) {
             throw SeaTideException.with(StatusEnumeration.F1);
         }
+    }
+
+    public Integer sendVerificationCode(String email) {
+        Integer verificationCode = generateVerificationCode();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("service@cciradih.top");
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("Ranger Regiment 海潮系统");
+        simpleMailMessage.setText("角色组验证码：" + verificationCode);
+        javaMailSender.send(simpleMailMessage);
+        return verificationCode;
+    }
+
+    private Integer generateVerificationCode() {
+        StringBuilder verificationCodeStringBuilder = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            int bit = new Random().nextInt(10);
+            verificationCodeStringBuilder.append(bit);
+        }
+        String verificationCodeString = verificationCodeStringBuilder.toString();
+        return Integer.valueOf(verificationCodeString);
     }
 }

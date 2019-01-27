@@ -28,4 +28,19 @@ public class CharacterController {
     public ResponseEntity<ResponseView> getTax(@PathVariable Long characterId, @RequestParam Long startDate, @RequestParam Long endDate) {
         return characterService.getTax(characterId, startDate, endDate);
     }
+
+    @GetMapping("/{characterId}/verification-code/")
+    public ResponseEntity<ResponseView> getVerificationCode(@PathVariable Long characterId, @RequestParam String email) {
+        return characterService.getVerificationCode(characterId, email);
+    }
+
+    @GetMapping("/{characterId}/verification/")
+    public ResponseEntity<ResponseView> verify(@PathVariable Long characterId, @RequestParam Integer verificationCode, @RequestParam String nickname) {
+        return characterService.verify(characterId, verificationCode, nickname);
+    }
+
+    @GetMapping("/{characterId}/group/")
+    public ResponseEntity<ResponseView> getGroup(@PathVariable Long characterId) {
+        return characterService.getGroup(characterId);
+    }
 }

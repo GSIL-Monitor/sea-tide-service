@@ -8,3 +8,7 @@ spring:
     url: jdbc:mysql://localhost:3306/sea_tide?serverTimezone=GMT%2B8
     username: root
     password: mysql
+  mail:
+    host: smtp.exmail.qq.com
+    username: service@cciradih.top
+    password: JAHihx2rtADtEgjF

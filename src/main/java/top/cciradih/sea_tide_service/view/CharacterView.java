@@ -10,6 +10,10 @@ public class CharacterView {
     private String name;
     private Long allianceId;
     private Long corporationId;
+    private String email;
+    private String nickname;
+    private Integer verificationCode;
+    private Boolean verification;
 
     public CharacterView() {
     }
@@ -18,10 +22,19 @@ public class CharacterView {
         this.id = id;
     }
 
-    public CharacterView(Long id, String name, Long allianceId, Long corporationId) {
+    public CharacterView(Integer verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public CharacterView(String name) {
+        this.name = name;
+    }
+
+    public CharacterView(Long id, String name, Long allianceId, Long corporationId, Boolean verification) {
         this.id = id;
         this.name = name;
         this.allianceId = allianceId;
         this.corporationId = corporationId;
+        this.verification = verification;
     }
 }

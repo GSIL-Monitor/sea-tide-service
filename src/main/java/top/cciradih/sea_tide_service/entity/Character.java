@@ -16,6 +16,10 @@ public class Character {
     private Long allianceId;
     private Long corporationId;
     private String refreshToken;
+    private String email;
+    private String nickname;
+    private Integer verificationCode;
+    private Boolean verification;
 
     public Character() {
     }
